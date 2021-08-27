@@ -48,7 +48,6 @@ def logout_request(request):
 
 
 def homepage(request):
-
     context = {
         'supermart_list':  'aa',
     }
@@ -57,9 +56,7 @@ def homepage(request):
 def one_to_one_chat(request):
     # if request.method =="GET":
     user = request.user 
-
     user = get_object_or_404(User, pk=user.id)
-    print("Hello", user)
     single_coversations = Conversation.objects.annotate(b = Count('member')).filter(b__lte=2, member = user.id)
     # for person in single_coversations:
     #     users = person.member.all().exclude(id=user.id)
@@ -73,10 +70,19 @@ def one_to_one_chat(request):
     
 
 def group_chat(request):
+    # if request.method =="GET":
+    user = request.user 
+    user = get_object_or_404(User, pk=user.id)
+    single_coversations = Conversation.objects.annotate(b = Count('member')).filter(b__gt=2, member = user.id)
+    # for person in single_coversations:
+    #     users = person.member.all().exclude(id=user.id)
+    #     a.append(users[0].id)
+
     context = {
-        'supermart_list':  'aa',
+        'single_coversations':  single_coversations,
     }
-    return render(request,'instagram/index.html',context)
+    return render(request,'instagram/singlechat.html', context)
+
 
 def chat(request, single_coversations_id):
     user = request.user
@@ -84,13 +90,13 @@ def chat(request, single_coversations_id):
     with_user =  conversation_id.member.all().exclude(id=user.id)
     with_user_id = with_user[0].id 
     messages =  conversation_id.message_set.all()
-    print(conversation_id)
     context = {
         'with_user_id':  with_user_id,
         'messages': messages,
         'conversation_id': conversation_id,
     }
     return render(request,'instagram/userchats.html',context)
+
 
 def send(request, conversation_id):
     user = request.user
