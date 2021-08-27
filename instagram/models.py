@@ -14,6 +14,11 @@ class Message(models.Model):
     conversation = models.ForeignKey(Conversation, on_delete=models.CASCADE, null = True)
     message_text = models.TextField()
     
+class UserStatus(models.Model):
+    users = models.OneToOneField(User, on_delete=models.CASCADE)
+    active = models.BooleanField()
+    
+    
 
     
     
