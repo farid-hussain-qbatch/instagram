@@ -1,0 +1,8 @@
+<h1>{{ supermart.name}}</h1>
+
+<ul>
+{% for customer in supermart.customer_set.all %}
+    <li>{{ customer.name }} -- {{ customer.address }}</li>
+{% endfor %}
+</ul>
+

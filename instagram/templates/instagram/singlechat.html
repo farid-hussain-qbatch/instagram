@@ -1,0 +1,10 @@
+<h1>One to One chat</h1>
+{% for a in single_coversations %}
+<li><a href="{% url 'instagram:chat' a.id %}">{{ a.title }}</a></li><br>
+
+{% endfor %}
+
+
+
+
+

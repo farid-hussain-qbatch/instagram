@@ -1,0 +1,17 @@
+<form action="{% url 'shopping:create'  supermart.id %}" method="post">
+    {% csrf_token %}
+    <fieldset>
+        <legend><h1>{{ supermart.name }}</h1></legend>
+        {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+        {% for customer in supermart.customer_set.all %}
+            <label for="customer{{ forloop.counter }}">{{ customer.name }}</label><br>
+        {% endfor %}
+    
+    </fieldset>
+    <input type="submit" value="Add Customer ">
+    </form> 
+    <h1>{{customer_list}}</h1>
+    
+    {% for a in customer_list  %}
+        <label >{{   a.id }}</label><br>
+    {% endfor %}

@@ -1,0 +1,7 @@
+<h1>{{ supermart_list}}</h1>
+<ul>
+    {% for choice in supermart_list.objects.all %}
+        <li><a href="{% url 'shopping:detail' supermart_list.id %}">{{ choice.name }}</a></li>
+        
+    {% endfor %}
+    </ul>

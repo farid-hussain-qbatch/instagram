@@ -1,0 +1,14 @@
+<form  action="{% url 'shopping:save'  supermart_id%}"method="post">
+    {% csrf_token %}
+    <label for="customer_name">Your name:  </label>
+    <input id="customer_name" type="text" name="customer_name" value="{{ current_name }}">
+    <br>
+    <label for="customer_phone">Your Phone: </label>
+    <input id="customer_phone" type="text" name="customer_phone" value="{{ current_phone }}">
+    <br>
+    <label for="customer_address">Your address: </label>
+    <input id="customer_address" type="text" name="customer_address" value="{{ current_address }}">
+    <br>
+    <input id="supermart_id" type='hidden' value='{{supermart_id}}' name='supermart_id'>
+    <input type="submit" value="Submit">
+</form>

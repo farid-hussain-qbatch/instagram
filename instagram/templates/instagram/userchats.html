@@ -1,0 +1,9 @@
+{% for message in messages %}
+<li>{{ message.message_text }}</li><br>
+{% endfor %}
+<form action="{% url 'instagram:send' conversation_id.id %}" method="post">
+    {% csrf_token %}
+    <textarea name="message" rows="10" cols="30"></textarea>
+    <br><br>
+    <input type="submit" value ="send">
+  </form>
