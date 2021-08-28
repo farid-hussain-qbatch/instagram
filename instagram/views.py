@@ -12,39 +12,47 @@ from django.http import HttpResponseRedirect
 
 # Create your views here.
 def register_request(request):
-	if request.method == "POST":
-		form = NewUserForm(request.POST)
-		if form.is_valid():
-			user = form.save()
-			login(request, user)
-			messages.success(request, "Registration successful." )
-			return redirect("instagram:homepage")
-		messages.error(request, "Unsuccessful registration. Invalid information.")
-	form = NewUserForm()
-	return render (request=request, template_name="instagram/register.html", context={"register_form":form})
+    if request.method == "POST":
+        form = NewUserForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            messages.success(request, "Registration successful." )
+            return redirect("instagram:homepage")
+        messages.error(request, "Unsuccessful registration. Invalid information.")
+    form = NewUserForm()
+    return render (request=request, template_name="instagram/register.html", context={"register_form":form})
 
 def login_request(request):
-	if request.method == "POST":
-		form = AuthenticationForm(request, data=request.POST)
-		if form.is_valid():
-			username = form.cleaned_data.get('username')
-			password = form.cleaned_data.get('password')
-			user = authenticate(username=username, password=password)
-			if user is not None:
-				login(request, user)
-				messages.info(request, f"You are now logged in as {username}.")
-				return redirect("instagram:homepage")
-			else:
-				messages.error(request,"Invalid username or password.")
-		else:
-			messages.error(request,"Invalid username or password.")
-	form = AuthenticationForm()
-	return render(request=request, template_name="instagram/login.html", context={"login_form":form})
+    if request.method == "POST":
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+                current_user = UserStatus.objects.filter(users_id=user.id)
+                if not current_user:
+                    UserStatus.objects.create(users = user, active=True)
+                else:
+                    UserStatus.objects.filter(users_id=user.id).update(active=True)    
+                    
+                messages.info(request, f"You are now logged in as {username}.")
+                return redirect("instagram:homepage")
+            else:
+                messages.error(request,"Invalid username or password.")
+        else:
+            messages.error(request,"Invalid username or password.")
+    form = AuthenticationForm()
+    return render(request=request, template_name="instagram/login.html", context={"login_form":form})
 
 def logout_request(request):
-	logout(request)
-	messages.info(request, "You have successfully logged out.") 
-	return redirect("instagram:login")
+    user = request.user 
+    UserStatus.objects.filter(users_id=user.id).update(active=False)  
+    logout(request)            
+    messages.info(request, "You have successfully logged out.") 
+    return redirect("instagram:login")
 
 
 def homepage(request):
