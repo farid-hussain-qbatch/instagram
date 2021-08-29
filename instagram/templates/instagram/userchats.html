@@ -1,26 +1,31 @@
+
 <style>
 
-  </style>
+</style>
 {% for message in messages %}
 <li class="solid"> {{ message.message_text }}</li>
 <p class="solid"><a href="{% url 'instagram:reply' message.id %}">Reply</a></p>
-   <ul>
-      {% with replies=message.reply_set.all %}
-      {% for reply in replies %}
-        <p class="solid">{{ reply.reply_text }}</p>
-      {% endfor %}
-    </ul>
-    {% endwith %}
+ <ul>
+    {% with replies=message.reply_set.all %}
+    {% for reply in replies %}
+      <p class="solid">{{ reply.reply_text }}</p>
+    {% endfor %}
+  </ul>
+  {% endwith %}
 {% endfor %}
 
 
 <form action="{% url 'instagram:send' conversation_id.id %}" method="post">
-    {% csrf_token %}
-    <textarea name="message" rows="10" cols="30"></textarea>
-    <br><br>
-    <input type="submit" value ="send">
-  </form>
+  {% csrf_token %}
+  <textarea name="message" rows="10" cols="30"></textarea>
+  <select name="tag" id="tag">
+    <option value="" >Choose here</option>
+    {% for users in conversation_id.member.all %}
+    <option value={{users}} >{{users}}</option>
+    {% endfor %}
+  </select>
+  <br><br>
+  <input type="submit" value ="send">
+</form>
 
-  <p><a href="{% url 'instagram:homepage' %}"> Back to Main Page</a></p>
-
-
+<p><a href="{% url 'instagram:homepage' %}"> Back to Main Page</a></p>

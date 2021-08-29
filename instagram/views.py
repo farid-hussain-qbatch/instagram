@@ -101,6 +101,11 @@ def send(request, conversation_id):
     user = request.user
     conversations = Conversation.objects.get(pk=conversation_id)
     message = request.POST['message']
+    print(message)
+    tag = request.POST['tag']
+    if tag:
+        message = "@" + tag + " " + message
+  
     Message.objects.create(sender=user , conversation = conversations,   message_text = message )
     return HttpResponseRedirect(reverse('instagram:chat', args=(conversations.id,)))
 
@@ -110,6 +115,7 @@ def reply(request, message_id):
         'message': message,
     }
     return render(request,'instagram/userreply.html',context)
+
 def replied(request, message_id):
     user = request.user
     message = Message.objects.get(pk=message_id)
