@@ -1,6 +1,19 @@
+<style>
+
+  </style>
 {% for message in messages %}
-<li>{{ message.message_text }}</li><br>
+<li class="solid"> {{ message.message_text }}</li>
+<p class="solid"><a href="{% url 'instagram:reply' message.id %}">Reply</a></p>
+   <ul>
+      {% with replies=message.reply_set.all %}
+      {% for reply in replies %}
+        <p class="solid">{{ reply.reply_text }}</p>
+      {% endfor %}
+    </ul>
+    {% endwith %}
 {% endfor %}
+
+
 <form action="{% url 'instagram:send' conversation_id.id %}" method="post">
     {% csrf_token %}
     <textarea name="message" rows="10" cols="30"></textarea>
@@ -8,5 +21,6 @@
     <input type="submit" value ="send">
   </form>
 
-  <li><a href="{% url 'instagram:homepage' %}"> Back to Main Page</a></li>
+  <p><a href="{% url 'instagram:homepage' %}"> Back to Main Page</a></p>
+
 

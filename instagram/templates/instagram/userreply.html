@@ -1,0 +1,8 @@
+<form action="{% url 'instagram:replied' message.id %}" method="post">
+    {% csrf_token %}
+    <textarea name="reply" rows="10" cols="30"></textarea>
+    <br><br>
+    <input type="submit" value ="send">
+  </form>
+
+  <p><a href="{% url 'instagram:homepage' %}"> Back to Main Page</a></p>

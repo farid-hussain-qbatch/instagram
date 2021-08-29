@@ -61,16 +61,12 @@ def homepage(request):
     }
     return render(request,'instagram/index.html',context)
 
+
 def one_to_one_chat(request):
-    # if request.method =="GET":
+    
     user = request.user 
     user = get_object_or_404(User, pk=user.id)
     single_coversations = Conversation.objects.annotate(b = Count('member')).filter(b__lte=2, member = user.id)
-    # for person in single_coversations:
-    #     users = person.member.all().exclude(id=user.id)
-    #     a.append(users[0].id)
-
-    print("single_coversations:", single_coversations)
     context = {
         'single_coversations':  single_coversations,
     }
@@ -78,14 +74,9 @@ def one_to_one_chat(request):
     
 
 def group_chat(request):
-    # if request.method =="GET":
     user = request.user 
     user = get_object_or_404(User, pk=user.id)
     single_coversations = Conversation.objects.annotate(b = Count('member')).filter(b__gt=2, member = user.id)
-    # for person in single_coversations:
-    #     users = person.member.all().exclude(id=user.id)
-    #     a.append(users[0].id)
-
     context = {
         'single_coversations':  single_coversations,
     }
@@ -97,7 +88,7 @@ def chat(request, single_coversations_id):
     conversation_id = Conversation.objects.get(pk=single_coversations_id)
     with_user =  conversation_id.member.all().exclude(id=user.id)
     with_user_id = with_user[0].id 
-    messages =  conversation_id.message_set.all()
+    messages =  conversation_id.message_set.all()   
     context = {
         'with_user_id':  with_user_id,
         'messages': messages,
@@ -111,6 +102,20 @@ def send(request, conversation_id):
     conversations = Conversation.objects.get(pk=conversation_id)
     message = request.POST['message']
     Message.objects.create(sender=user , conversation = conversations,   message_text = message )
+    return HttpResponseRedirect(reverse('instagram:chat', args=(conversations.id,)))
+
+def reply(request, message_id):
+    message = Message.objects.get(pk=message_id)
+    context = {
+        'message': message,
+    }
+    return render(request,'instagram/userreply.html',context)
+def replied(request, message_id):
+    user = request.user
+    message = Message.objects.get(pk=message_id)
+    reply = request.POST['reply']
+    conversations = message.conversation
+    Reply.objects.create(sender=user , message = message, reply_text = reply )
     return HttpResponseRedirect(reverse('instagram:chat', args=(conversations.id,)))
     
     
