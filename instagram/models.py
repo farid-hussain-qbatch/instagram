@@ -13,10 +13,20 @@ class Message(models.Model):
     sender = models.ForeignKey(User, on_delete=models.CASCADE)
     conversation = models.ForeignKey(Conversation, on_delete=models.CASCADE, null = True)
     message_text = models.TextField()
+  
     
 class UserStatus(models.Model):
     users = models.OneToOneField(User, on_delete=models.CASCADE)
     active = models.BooleanField()
+  
+    
+    
+class Reply(models.Model):
+    message = models.ForeignKey(Message, on_delete=models.CASCADE)
+    reply_text = models.TextField()
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, null = True)
+  
+    
     
     
 
