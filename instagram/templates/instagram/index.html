@@ -7,31 +7,27 @@
     <div class="collapse navbar-collapse" id="navbarText">
       <ul class="navbar-nav mr-auto">
         {% if user.is_authenticated %}
-        
         <li class="nav-item">
           <a class="nav-link" href="{% url 'instagram:logout' %}">Logout</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">Welcome, {{user.username}}</a>
         </li>
-  
         {% else %}
-  
         <li class="nav-item">
           <a class="nav-link" href="{% url 'instagram:login' %}">Login</a>
         </li>
-  
+
         {% endif %}
       </ul>
     </div>
   </nav>
-
   <h1>Welcome to Instagram</h1>
+  <p>User Active Status: {{ user.userstatus.active}}</p>
   <div>
     {% if user.is_authenticated %}
-    <li><a href="{% url 'instagram:one_to_one_chat'  %}">One To One Chat </a></li>
+    <li><a href="{% url 'instagram:one_to_one_chat' %}">One To One Chat </a></li>
     <li><a href="{% url 'instagram:group_chat' %}">Group Chat </a></li>
     {% endif %}
-
   </div>
 
