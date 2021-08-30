@@ -9,6 +9,7 @@ from .models import *
 from django.urls import reverse
 from django.db.models import *
 from django.http import HttpResponseRedirect
+# from emoji import emojize
 
 
 # Create your views here.
@@ -127,7 +128,7 @@ def replied(request, message_id):
     Reply.objects.create(sender=user , message = message, reply_text = reply )
     return HttpResponseRedirect(reverse('instagram:chat', args=(conversations.id,)))
 
-def msgreact(request, message_id):
+def msgreact(request, message_id ):
     message = Message.objects.get(pk=message_id)
     context = {
         'message': message,
@@ -143,6 +144,28 @@ def msgreacted(request, message_id):
     conversations = message.conversation
     Reaction.objects.create(reactor=user , content_object = message, text = reaction  )
     return HttpResponseRedirect(reverse('instagram:chat', args=(conversations.id,)))
+
+def replyreact(request, reply_id):
+    reply = Reply.objects.get(pk=reply_id)
+    print(reply)
+    context = {
+        'reply': reply,
+    }
+    return render(request,'instagram/userreacts.html',context)
+
+def replyreacted(request, reply_id):
+    user = request.user
+    reply = Reply.objects.get(pk=reply_id)
+    reaction = request.POST['reaction']
+    # print(emojize(reaction))
+    # reaction = emojize(reaction)
+    conversations = reply.message.conversation
+    Reaction.objects.create(reactor=user , content_object = reply, text = reaction  )
+    return HttpResponseRedirect(reverse('instagram:chat', args=(conversations.id,)))
+
+
+
+
     
     
     

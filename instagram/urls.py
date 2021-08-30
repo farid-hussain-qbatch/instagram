@@ -18,6 +18,9 @@ urlpatterns = [
     path('<int:message_id>/replied/', views.replied, name='replied'),
     path('<int:message_id>/react/', views.msgreact, name='msgreact'),
     path('<int:message_id>/reacted/', views.msgreacted, name='msgreacted'),
+    path('<int:reply_id>/reacts/', views.replyreact, name='replyreact'),
+    path('<int:reply_id>/reacte/', views.replyreacted, name='replyreacted'),
+
    
  
 
