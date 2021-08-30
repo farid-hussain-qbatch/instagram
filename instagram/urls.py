@@ -16,6 +16,9 @@ urlpatterns = [
     path('<int:conversation_id>/send/', views.send, name='send'),
     path('<int:message_id>/reply/', views.reply, name='reply'),
     path('<int:message_id>/replied/', views.replied, name='replied'),
+    path('<int:message_id>/react/', views.msgreact, name='msgreact'),
+    path('<int:message_id>/reacted/', views.msgreacted, name='msgreacted'),
+   
  
 
 ]
