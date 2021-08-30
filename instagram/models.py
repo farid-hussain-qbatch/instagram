@@ -10,6 +10,9 @@ class Conversation(models.Model):
     def __str__(self):
         return self.title
     
+    def get_last_message(self):
+        return self.message_set.last().message_text
+    
 class Reaction(models.Model):
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
