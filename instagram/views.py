@@ -60,11 +60,11 @@ def logout_request(request):
 
 
 def homepage(request):
+    active_users =  User.objects.filter(userstatus__active=True)
     context = {
-        'supermart_list':  'aa',
+        'active_users':  active_users,
     }
-    return render(request,'instagram/index.html',context)
-
+    return render(request,'instagram/index.html', context)
 
 def one_to_one_chat(request):
     user = request.user 
@@ -159,14 +159,3 @@ def reply_reacted(request, reply_id):
     Reaction.objects.create(reactor=user , content_object = reply, text = reaction  )
     return HttpResponseRedirect(reverse('instagram:chat', args=(conversations.id,)))
     
-    
-    
-    
-   
-    
-    
-
-
-
-
-
