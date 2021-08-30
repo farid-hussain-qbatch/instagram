@@ -10,6 +10,7 @@ from django.urls import reverse
 from django.db.models import *
 from django.http import HttpResponseRedirect
 
+
 # Create your views here.
 def register_request(request):
     if request.method == "POST":
@@ -101,7 +102,6 @@ def send(request, conversation_id):
     user = request.user
     conversations = Conversation.objects.get(pk=conversation_id)
     message = request.POST['message']
-    print(message)
     tag = request.POST['tag']
     if tag:
         message = "@" + tag + " " + message
@@ -120,9 +120,30 @@ def replied(request, message_id):
     user = request.user
     message = Message.objects.get(pk=message_id)
     reply = request.POST['reply']
+    tag = request.POST['tag']
+    if tag:
+        reply = "@" + tag + " " + reply
     conversations = message.conversation
     Reply.objects.create(sender=user , message = message, reply_text = reply )
     return HttpResponseRedirect(reverse('instagram:chat', args=(conversations.id,)))
+
+def msgreact(request, message_id):
+    message = Message.objects.get(pk=message_id)
+    context = {
+        'message': message,
+    }
+    return render(request,'instagram/userreact.html',context)
+
+def msgreacted(request, message_id):
+    user = request.user
+    message = Message.objects.get(pk=message_id)
+    reaction = request.POST['reaction']
+    # print(emojize(reaction))
+    # reaction = emojize(reaction)
+    conversations = message.conversation
+    Reaction.objects.create(reactor=user , content_object = message, text = reaction  )
+    return HttpResponseRedirect(reverse('instagram:chat', args=(conversations.id,)))
+    
     
     
     

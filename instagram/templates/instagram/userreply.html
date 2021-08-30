@@ -1,6 +1,12 @@
 <form action="{% url 'instagram:replied' message.id %}" method="post">
     {% csrf_token %}
     <textarea name="reply" rows="10" cols="30"></textarea>
+    <select name="tag" id="tag">
+        <option value="" >Choose here</option>
+        {% for users in message.conversation.member.all %}
+        <option value={{users}} >{{users}}</option>
+        {% endfor %}
+      </select>
     <br><br>
     <input type="submit" value ="send">
   </form>

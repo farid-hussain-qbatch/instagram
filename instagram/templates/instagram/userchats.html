@@ -3,12 +3,20 @@
 
 </style>
 {% for message in messages %}
-<li class="solid"> {{ message.message_text }}</li>
-<p class="solid"><a href="{% url 'instagram:reply' message.id %}">Reply</a></p>
+<p class="solid">Message: {{ message.message_text }}</p>
+<a href="{% url 'instagram:reply' message.id %}"><button>Reply</button></a>
+<a href="{% url 'instagram:msgreact' message.id %}"><button>React</button></a>
+{% for reaction in message.reaction.all %}
+<p class="solid">Reaction: {{ reaction.text }}</p>
+<a href=><button>React</button></a>
+{% endfor %}
+
+
  <ul>
     {% with replies=message.reply_set.all %}
     {% for reply in replies %}
-      <p class="solid">{{ reply.reply_text }}</p>
+      <p class="solid">Reply: {{ reply.reply_text }}</p>
+      <a href=><button>React</button></a>
     {% endfor %}
   </ul>
   {% endwith %}
