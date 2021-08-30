@@ -9,16 +9,19 @@ from .models import *
 from django.urls import reverse
 from django.db.models import *
 from django.http import HttpResponseRedirect
-# from emoji import emojize
 
 
-# Create your views here.
 def register_request(request):
     if request.method == "POST":
         form = NewUserForm(request.POST)
         if form.is_valid():
             user = form.save()
             login(request, user)
+            current_user = UserStatus.objects.filter(users_id=user.id)
+            if not current_user:
+                UserStatus.objects.create(users = user, active=True)
+            else:
+                UserStatus.objects.filter(users_id=user.id).update(active=True)    
             messages.success(request, "Registration successful." )
             return redirect("instagram:homepage")
         messages.error(request, "Unsuccessful registration. Invalid information.")
@@ -38,8 +41,7 @@ def login_request(request):
                 if not current_user:
                     UserStatus.objects.create(users = user, active=True)
                 else:
-                    UserStatus.objects.filter(users_id=user.id).update(active=True)    
-                    
+                    UserStatus.objects.filter(users_id=user.id).update(active=True)     
                 messages.info(request, f"You are now logged in as {username}.")
                 return redirect("instagram:homepage")
             else:
@@ -65,7 +67,6 @@ def homepage(request):
 
 
 def one_to_one_chat(request):
-    
     user = request.user 
     user = get_object_or_404(User, pk=user.id)
     single_coversations = Conversation.objects.annotate(b = Count('member')).filter(b__lte=2, member = user.id)
@@ -128,44 +129,35 @@ def replied(request, message_id):
     Reply.objects.create(sender=user , message = message, reply_text = reply )
     return HttpResponseRedirect(reverse('instagram:chat', args=(conversations.id,)))
 
-def msgreact(request, message_id ):
+def msg_react(request, message_id):
     message = Message.objects.get(pk=message_id)
     context = {
         'message': message,
     }
     return render(request,'instagram/userreact.html',context)
 
-def msgreacted(request, message_id):
+def msg_reacted(request, message_id):
     user = request.user
     message = Message.objects.get(pk=message_id)
     reaction = request.POST['reaction']
-    # print(emojize(reaction))
-    # reaction = emojize(reaction)
     conversations = message.conversation
     Reaction.objects.create(reactor=user , content_object = message, text = reaction  )
     return HttpResponseRedirect(reverse('instagram:chat', args=(conversations.id,)))
 
-def replyreact(request, reply_id):
+def reply_react(request, reply_id):
     reply = Reply.objects.get(pk=reply_id)
-    print(reply)
     context = {
         'reply': reply,
     }
     return render(request,'instagram/userreacts.html',context)
 
-def replyreacted(request, reply_id):
+def reply_reacted(request, reply_id):
     user = request.user
     reply = Reply.objects.get(pk=reply_id)
     reaction = request.POST['reaction']
-    # print(emojize(reaction))
-    # reaction = emojize(reaction)
     conversations = reply.message.conversation
     Reaction.objects.create(reactor=user , content_object = reply, text = reaction  )
     return HttpResponseRedirect(reverse('instagram:chat', args=(conversations.id,)))
-
-
-
-
     
     
     
@@ -173,6 +165,8 @@ def replyreacted(request, reply_id):
    
     
     
+
+
 
 
 

@@ -2,10 +2,7 @@ from django.urls import path
 from . import views
 
 app_name = "instagram"   
-
-
 urlpatterns = [
-    # path(" ", views.homepage, name="homepage"),
     path("register", views.register_request, name="register"),
     path("login", views.login_request, name="login"),
     path('', views.homepage, name='homepage'),
@@ -16,12 +13,8 @@ urlpatterns = [
     path('<int:conversation_id>/send/', views.send, name='send'),
     path('<int:message_id>/reply/', views.reply, name='reply'),
     path('<int:message_id>/replied/', views.replied, name='replied'),
-    path('<int:message_id>/react/', views.msgreact, name='msgreact'),
-    path('<int:message_id>/reacted/', views.msgreacted, name='msgreacted'),
-    path('<int:reply_id>/reacts/', views.replyreact, name='replyreact'),
-    path('<int:reply_id>/reacte/', views.replyreacted, name='replyreacted'),
-
-   
- 
-
+    path('<int:message_id>/react/', views.msg_react, name='msgreact'),
+    path('<int:message_id>/reacted/', views.msg_reacted, name='msgreacted'),
+    path('<int:reply_id>/replyreact/', views.reply_react, name='replyreact'),
+    path('<int:reply_id>/replyreacted/', views.reply_reacted, name='replyreacted'),
 ]

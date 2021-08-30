@@ -1,6 +1,4 @@
-
 <style>
-
 </style>
 {% for message in messages %}
 <p class="solid">Message: {{ message.message_text }}</p>
@@ -9,10 +7,6 @@
 {% for reaction in message.reaction.all %}
 <p class="solid">Reaction: {{ reaction.text }}</p>
 {% endfor %}
-
-
-
-
  <ul>
     {% with replies=message.reply_set.all %}
     {% for reply in replies %}
@@ -21,12 +15,11 @@
           <p class="solid">Reaction: {{ reaction.text }}</p>
       {% endfor %}
       <a href="{% url 'instagram:replyreact' reply.id %}"><button>React</button></a>
+
     {% endfor %}
   </ul>
   {% endwith %}
 {% endfor %}
-
-
 <form action="{% url 'instagram:send' conversation_id.id %}" method="post">
   {% csrf_token %}
   <textarea name="message" rows="10" cols="30"></textarea>
@@ -39,5 +32,4 @@
   <br><br>
   <input type="submit" value ="send">
 </form>
-
 <p><a href="{% url 'instagram:homepage' %}"> Back to Main Page</a></p>
