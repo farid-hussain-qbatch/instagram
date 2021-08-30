@@ -69,9 +69,9 @@ def homepage(request):
 def one_to_one_chat(request):
     user = request.user 
     user = get_object_or_404(User, pk=user.id)
-    single_coversations = Conversation.objects.annotate(b = Count('member')).filter(b__lte=2, member = user.id)
+    coversations = Conversation.objects.annotate(count_member = Count('member')).filter(b__lte=2, member = user.id)
     context = {
-        'single_coversations':  single_coversations,
+        'coversations': coversations,
     }
     return render(request,'instagram/singlechat.html', context)
     
@@ -79,9 +79,9 @@ def one_to_one_chat(request):
 def group_chat(request):
     user = request.user 
     user = get_object_or_404(User, pk=user.id)
-    single_coversations = Conversation.objects.annotate(b = Count('member')).filter(b__gt=2, member = user.id)
+    coversations = Conversation.objects.annotate(count_member = Count('member')).filter(b__gt=2, member = user.id)
     context = {
-        'single_coversations':  single_coversations,
+        'coversations': coversations,
     }
     return render(request,'instagram/singlechat.html', context)
 
