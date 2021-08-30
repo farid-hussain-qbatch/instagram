@@ -69,7 +69,7 @@ def homepage(request):
 def one_to_one_chat(request):
     user = request.user 
     user = get_object_or_404(User, pk=user.id)
-    coversations = Conversation.objects.annotate(count_member = Count('member')).filter(b__lte=2, member = user.id)
+    coversations = Conversation.objects.annotate(count_member = Count('member')).filter(count_member__lte=2, member = user.id)
     context = {
         'coversations': coversations,
     }
@@ -79,7 +79,7 @@ def one_to_one_chat(request):
 def group_chat(request):
     user = request.user 
     user = get_object_or_404(User, pk=user.id)
-    coversations = Conversation.objects.annotate(count_member = Count('member')).filter(b__gt=2, member = user.id)
+    coversations = Conversation.objects.annotate(count_member = Count('member')).filter(count_member__gt=2, member = user.id)
     context = {
         'coversations': coversations,
     }
