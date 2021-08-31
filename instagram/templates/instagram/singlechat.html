@@ -1,6 +1,6 @@
 <h1>Chat</h1>
 {% for chat in coversations %}
-    <li><a href="{% url 'instagram:chat' chat.id %}">{{ chat.title }}</a></li>
+    <li><a href="{% url 'instagram:chat' chat.id %}">{{ chat.title }}</a> </li>
     <p>Last Message: {{ chat.get_last_message }}</p><br>
 {% endfor %}
 
