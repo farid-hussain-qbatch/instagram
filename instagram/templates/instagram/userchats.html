@@ -1,18 +1,18 @@
 <style>
 </style>
 {% for message in messages %}
-<p class="solid">Message: {{ message.message_text }}</p>
+<p class="solid">{{message.sender.username}}: {{ message.message_text }}</p>
 <a href="{% url 'instagram:reply' message.id %}"><button>Reply</button></a>
 <a href="{% url 'instagram:msgreact' message.id %}"><button>React</button></a>
 {% for reaction in message.reaction.all %}
-<p class="solid">Reaction: {{ reaction.text }}</p>
+<p class="solid">{{reaction.reactor}}: {{ reaction.text }}</p>
 {% endfor %}
  <ul>
     {% with replies=message.reply_set.all %}
     {% for reply in replies %}
-      <p class="solid">Reply: {{ reply.reply_text }}</p>
+      <p class="solid">{{reply.sender}}: {{ reply.reply_text }}</p>
       {% for reaction in reply.reaction.all %}
-          <p class="solid">Reaction: {{ reaction.text }}</p>
+          <p class="solid">{{reaction.reactor}}: {{ reaction.text }}</p>
       {% endfor %}
       <a href="{% url 'instagram:replyreact' reply.id %}"><button>React</button></a>
 

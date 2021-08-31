@@ -28,6 +28,7 @@ def register_request(request):
     form = NewUserForm()
     return render (request=request, template_name="instagram/register.html", context={"register_form":form})
 
+
 def login_request(request):
     if request.method == "POST":
         form = AuthenticationForm(request, data=request.POST)
@@ -50,6 +51,7 @@ def login_request(request):
             messages.error(request,"Invalid username or password.")
     form = AuthenticationForm()
     return render(request=request, template_name="instagram/login.html", context={"login_form":form})
+
 
 def logout_request(request):
     user = request.user 
@@ -89,15 +91,14 @@ def group_chat(request):
 def chat(request, single_coversations_id):
     user = request.user
     conversation_id = Conversation.objects.get(pk=single_coversations_id)
-    with_user =  conversation_id.member.all().exclude(id=user.id)
-    with_user_id = with_user[0].id 
+    with_user =  conversation_id.member.all().exclude(id=user.id).first()
     messages =  conversation_id.message_set.all()   
     context = {
-        'with_user_id':  with_user_id,
+        'with_user_id':  with_user.id,
         'messages': messages,
         'conversation_id': conversation_id,
     }
-    return render(request,'instagram/userchats.html',context)
+    return render(request,'instagram/userchats.html', context)
 
 
 def send(request, conversation_id):
@@ -108,7 +109,7 @@ def send(request, conversation_id):
     if tag:
         message = "@" + tag + " " + message
   
-    Message.objects.create(sender=user , conversation = conversations,   message_text = message )
+    Message.objects.create(sender=user , conversation=conversations,   message_text=message )
     return HttpResponseRedirect(reverse('instagram:chat', args=(conversations.id,)))
 
 def reply(request, message_id):
@@ -149,7 +150,7 @@ def reply_react(request, reply_id):
     context = {
         'reply': reply,
     }
-    return render(request,'instagram/userreacts.html',context)
+    return render(request,'instagram/userreacts.html', context)
 
 def reply_reacted(request, reply_id):
     user = request.user

@@ -22,6 +22,7 @@ class Reaction(models.Model):
     reactor = models.ForeignKey(User, on_delete=models.CASCADE, null= True)
     def __str__(self):
         return self.name
+    
     @property
     def source(self):
         return self.content_object
